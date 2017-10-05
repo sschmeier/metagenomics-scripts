@@ -173,8 +173,8 @@ logFile="${scriptName}-$(date +"%Y%m%d-%H%M%S").log"
 usage() {
   echo -n "${scriptName} [OPTION] CF-IDX INDIR OUTDIR
 
-Script will look for *.fastq files in INDOR and run centrifuge with the 
-CF-IDX index for each file. Results will be put in OUTDIR.
+Script will look for *.fastq files in INDIR and run centrifuge with the CF-IDX 
+index for each file (or combined if -c is set). Results will be put in OUTDIR.
 
  ${bold}General Options:${reset}
   -q, --quiet       Quiet (no output)
@@ -192,7 +192,6 @@ CF-IDX index for each file. Results will be put in OUTDIR.
   -k, --krona       Run krona on the centrifuge results
   -p NUM            Number of processes to use [default=4]
 
-     
 "
 }
 
