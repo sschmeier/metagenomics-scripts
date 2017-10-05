@@ -150,6 +150,7 @@ files="*.fastq"
 processes=4
 combine=false
 gzipped=false
+krona=false
 args=()
 
 # Set Colors
