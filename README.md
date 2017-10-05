@@ -8,8 +8,8 @@ Processing several input-files either one after the other or ina combined manner
 ```bash
 centrifuge-batch.sh [OPTION] CF-IDX INDIR OUTDIR
 
-Script will look for *.fastq files in INDOR and run centrifuge with the
-CF-IDX index for each file. Results will be put in OUTDIR.
+Script will look for *.fastq files in INDIR and run centrifuge with the CF-IDX
+index for each file (or combined if -c is set). Results will be put in OUTDIR.
 
  General Options:
   -q, --quiet       Quiet (no output)
@@ -26,6 +26,7 @@ CF-IDX index for each file. Results will be put in OUTDIR.
                     (Much faster, however input-file info lost)
   -k, --krona       Run krona on the centrifuge results
   -p NUM            Number of processes to use [default=4]
+
 ```
 
 
