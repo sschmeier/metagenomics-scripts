@@ -32,6 +32,10 @@ function mainScript() {
         optfa="-f"
     fi
 
+    if $gzipped ; then
+        files=$files".gz"
+    fi
+    
     filelist=(${INDIR}/$files)
     NUMBER=${#filelist[@]}
     if $combine ; then
@@ -145,6 +149,7 @@ fasta=false
 files="*.fastq"
 processes=4
 combine=false
+gzipped=false
 args=()
 
 # Set Colors
@@ -187,6 +192,7 @@ index for each file (or combined if -c is set). Results will be put in OUTDIR.
 
  ${bold}Specific Options:${reset}
   -f, --fasta       Query input files are (multi-)FASTA .fa
+      --gzip        Input is gzipped compressed.
   -c, --combine     Combine the results of all files 
                     (Much faster, however input-file info lost)
   -k, --krona       Run krona on the centrifuge results
@@ -249,6 +255,7 @@ while [[ $1 = -?* ]]; do
     -f|--fasta) fasta=true;;
     -c|--combine) combine=true;;
     -k|--krona) krona=true;;
+    --gzip) gzipped=true;;
     -p) shift; processes=$1;;
     --endopts) shift; break ;;
     *) die "invalid option: '$1'." ;;
