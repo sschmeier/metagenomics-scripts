@@ -47,12 +47,17 @@ function mainScript() {
         centrifuge --quiet -p $processes $optfa -x $IDX -U $filelist -S $OUTDIR/results.txt --report-file $OUTDIR/report.txt
         info "CONVERT REPORT..."
         centrifuge-kreport --show-zeros -x $IDX $OUTDIR/results.txt > $OUTDIR/report-krakenlike.txt
+   
         if $krona; then
             info "RUN KRONA..."
             tmpfile=${tmpDir}-krona
             cat $OUTDIR/results.txt | cut -f 1,3 > ${tmpfile}
             ktImportTaxonomy ${tmpfile} -o $OUTDIR/taxonomy.krona.html
         fi
+        info('Compress results')
+        gzip $OUTDIR/results.txt
+        gzip $OUTDIR/report-krakenlike.txt
+        gzip $OUTDIR/report.txt
         info "DONE";
         
     else
@@ -73,6 +78,11 @@ function mainScript() {
                 ktImportTaxonomy ${tmpfile} -o $OUT/taxonomy.krona.html
             fi
             let COUNTER=COUNTER+1
+            
+            info('Compress results')
+            gzip $OUTDIR/results.txt
+            gzip $OUTDIR/report-krakenlike.txt
+            gzip $OUTDIR/report.txt
         done
         info "DONE"
     fi
@@ -139,7 +149,7 @@ function verbose()    { if ${verbose}; then debug "$@"; fi }
 # ----------------------
 scriptName=$(basename "$0")
 
-# Set Flags
+# Set default Flags
 quiet=false
 printLog=false
 verbose=false
