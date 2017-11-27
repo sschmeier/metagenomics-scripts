@@ -54,11 +54,11 @@ function mainScript() {
             cat $OUTDIR/results.txt | cut -f 1,3 > ${tmpfile}
             ktImportTaxonomy ${tmpfile} -o $OUTDIR/taxonomy.krona.html
         fi
-        info('Compress results')
+        info 'Compress results'
         gzip $OUTDIR/results.txt
         gzip $OUTDIR/report-krakenlike.txt
         gzip $OUTDIR/report.txt
-        info "DONE";
+        info "DONE"
         
     else
         COUNTER=1
@@ -79,7 +79,7 @@ function mainScript() {
             fi
             let COUNTER=COUNTER+1
             
-            info('Compress results')
+            info 'Compress results'
             gzip $OUTDIR/results.txt
             gzip $OUTDIR/report-krakenlike.txt
             gzip $OUTDIR/report.txt
