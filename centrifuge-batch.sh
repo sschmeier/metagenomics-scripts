@@ -102,7 +102,7 @@ function mainScript() {
         info "Create combined report"
 	# get all tax ids and names from one file, combine krakenlike reports
 	ls $OUTDIR/*/report-krakenlike.txt.gz | head -1 | xargs -I pattern zcat pattern | cut -f 5,6 > $OUTDIR/alltax.txt
-	python combine-krakenlike-reports.py $OUTDIR/alltax.txt $OUTDIR/*/report-krakenlike.txt.gz -o $OUTDIR/report-krakenlike-combined.txt.gz	
+	python combine-krakenlike-reports.py $OUTDIR/alltax.txt $OUTDIR/*/report-krakenlike.txt.gz -o $OUTDIR/centrifuge-report-krakenlike-combined.txt.gz	
         success "DONE"
     fi
 }
