@@ -24,6 +24,12 @@ function mainScript() {
     IDX=${args[0]}
     INDIR=${args[1]}
     OUTDIR=${args[2]}
+    
+    # does result dir exist? if not create
+    if [ ! -d "$OUTDIR" ]; then
+	# Control will enter here if $DIRECTORY doesn't exist.
+	mkdir -p $OUTDIR
+    fi
 
     # fasta files instead of fastq?
     optfa=""
@@ -45,21 +51,25 @@ function mainScript() {
         header "PROCESSING $NUMBER FILES:" $filelist
         info "RUN CENTRIFUGE..."
         centrifuge --quiet -p $processes $optfa -x $IDX -U $filelist -S $OUTDIR/results.txt --report-file $OUTDIR/report.txt
+        success "DONE"
+
         info "CONVERT REPORT..."
         centrifuge-kreport --show-zeros -x $IDX $OUTDIR/results.txt > $OUTDIR/report-krakenlike.txt
-   
+        success "DONE"
+
         if $krona; then
             info "RUN KRONA..."
             tmpfile=${tmpDir}-krona
             cat $OUTDIR/results.txt | cut -f 1,3 > ${tmpfile}
             ktImportTaxonomy ${tmpfile} -o $OUTDIR/taxonomy.krona.html
+            success "DONE"
         fi
+	
         info 'Compress results'
         gzip $OUTDIR/results.txt
         gzip $OUTDIR/report-krakenlike.txt
         gzip $OUTDIR/report.txt
-        info "DONE"
-        
+        success "DONE"
     else
         COUNTER=1
         for file in ${INDIR}/$files; do
@@ -68,23 +78,32 @@ function mainScript() {
             mkdir -p $OUT;
             info "RUN CENTRIFUGE..."
             centrifuge --quiet -p $processes $optfa -x $IDX -U $file -S $OUT/results.txt --report-file $OUT/report.txt
+            success "DONE"
             info "CONVERT REPORT..."
             centrifuge-kreport --show-zeros -x $IDX $OUT/results.txt > $OUT/report-krakenlike.txt
-            
+            success "DONE"
+
             if $krona; then
                 info "RUN KRONA..."
                 tmpfile=${tmpDir}-krona
                 cat $OUT/results.txt | cut -f 1,3 > ${tmpfile}
                 ktImportTaxonomy ${tmpfile} -o $OUT/taxonomy.krona.html
+		success "DONE"
             fi
             let COUNTER=COUNTER+1
-            
+
             info 'Compress results'
-            gzip $OUTDIR/results.txt
-            gzip $OUTDIR/report-krakenlike.txt
-            gzip $OUTDIR/report.txt
+            gzip $OUT/results.txt
+            gzip $OUT/report-krakenlike.txt
+            gzip $OUT/report.txt
+            success "DONE"
         done
-        info "DONE"
+
+        info "Create combined report"
+	# get all tax ids and names from one file, combine krakenlike reports
+	ls $OUTDIR/*/report-krakenlike.txt.gz | head -1 | xargs -I pattern zcat pattern | cut -f 5,6 > $OUTDIR/alltax.txt
+	python combine-krakenlike-reports.py $OUTDIR/alltax.txt $OUTDIR/*/report-krakenlike.txt.gz -o $OUTDIR/report-krakenlike-combined.txt.gz	
+        success "DONE"
     fi
 }
 
@@ -204,7 +223,7 @@ index for each file (or combined if -c is set). Results will be put in OUTDIR.
  ${bold}Specific Options:${reset}
   -f, --fasta       Query input files are (multi-)FASTA .fa
       --gzip        Input is gzipped compressed.
-  -c, --combine     Combine the results of all files 
+  -c, --combine     Create one report for all fast(aq) files. 
                     (Much faster, however input-file info lost)
   -k, --krona       Run krona on the centrifuge results
   -p NUM            Number of processes to use [default=4]

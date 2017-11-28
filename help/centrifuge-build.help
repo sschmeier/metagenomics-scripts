@@ -1,0 +1,29 @@
+Centrifuge version 1.0.3-beta by Daehwan Kim (infphilo@gmail.com, http://www.ccb.jhu.edu/people/infphilo)
+Usage: centrifuge-build [options]* --conversion-table <table file> --taxonomy-tree <taxonomy tree file> <reference_in> <cf_index_base>
+    reference_in            comma-separated list of files with ref sequences
+    centrifuge_index_base          write cf data to files with this dir/basename
+Options:
+    -c                      reference sequences given on cmd line (as
+                            <reference_in>)
+    --large-index           force generated index to be 'large', even if ref
+                            has fewer than 4 billion nucleotides
+    -a/--noauto             disable automatic -p/--bmax/--dcv memory-fitting
+    --bmax <int>            max bucket sz for blockwise suffix-array builder
+    --bmaxdivn <int>        max bucket sz as divisor of ref len (default: 4)
+    --dcv <int>             diff-cover period for blockwise (default: 1024)
+    --nodc                  disable diff-cover (algorithm becomes quadratic)
+    -r/--noref              don't build .3/.4.bt2 (packed reference) portion
+    -3/--justref            just build .3/.4.bt2 (packed reference) portion
+    -o/--offrate <int>      SA is sampled every 2^offRate BWT chars (default: 5)
+    -t/--ftabchars <int>    # of chars consumed in initial lookup (default: 10)
+    --conversion-table <file name>  a table that converts any id to a taxonomy id
+    --taxonomy-tree    <file name>  taxonomy tree
+    --name-table       <file name>  names corresponding to taxonomic IDs
+    --size-table       <file name>  table of contig (or genome) sizes
+    --seed <int>            seed for random number generator
+    -q/--quiet              verbose output (for debugging)
+    -p/--threads <int>      number of alignment threads to launch (1)
+    --kmer-count <int>      k size for counting the number of distinct k-mer
+    -h/--help               print detailed description of tool and its options
+    --usage                 print this usage message
+    --version               print version information and quit

@@ -1,0 +1,17 @@
+
+Usage: centrifuge-kreport -x <index name> OPTIONS <centrifuge output file(s)>
+
+centrifuge-kreport creates Kraken-style reports from centrifuge out files.
+
+Options:
+    -x INDEX            (REQUIRED) Centrifuge index
+
+    --only-unique        Only count reads that were uniquely assigned to one taxon
+    --show-zeros         Show clades that have zero reads, too
+    --is-count-table     The format of the file is 'TAXID<tab>COUNT' instead of the standard
+                         Centrifuge output format
+
+    --min-score SCORE    Require a minimum score for reads to be counted
+    --min-length LENGTH  Require a minimum alignment length to the read
+  
+  
